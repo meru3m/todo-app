@@ -1,15 +1,18 @@
-import modules
-import FreeSimpleGUI as sg
+import FreeSimpleGUI as sg 
 
+# Create the elements that go inside the window
+label = sg.Text("Type in a to-do")  # Create a text label
+input_box = sg.InputText(tooltip="Enter todo")  # Create a text box with a tooltip
+add_button = sg.Button("Add")  # Create an "Add" button
 
-label = sg.Text("Type in a to-do")
-input_box = sg.InputText(tooltip="Enter todo")
-add_button = sg.Button("Add")
-layout = [[label], [input_box, add_button]]  # Define what will go inside the window (nothing for now)
+# Define the layout of the window
+layout = [[label], [input_box, add_button]]  # Arrange the elements in the window
 
-# Window: Think of this as creating a blank canvas where you can put things like buttons, text boxes, etc.
-window = sg.Window("My To-Do App", layout)  # Create the window with a title
+# Create the window with a title and the defined layout
+window = sg.Window("My To-Do App", layout)
 
-window.read()  # Show the window and keep it open
+# Display the window and keep it open until the user interacts with it
+window.read()
 
-window.close()  # Close the window when done
+# Close the window when done
+window.close()
