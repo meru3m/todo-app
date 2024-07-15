@@ -1,5 +1,6 @@
 Clean the bag
 Fix the drawer
 eat dinner
-give hugo a treat
 wash dishes
+wash clothes
+Master Python!
