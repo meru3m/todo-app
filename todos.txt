@@ -1,6 +1,4 @@
-Clean the bag
-Fix the drawer
-eat dinner
-wash dishes
-wash clothes
-Master Python!
+Learn Python!
+Eat Breakfast
+Watch Haikyu!
+
