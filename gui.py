@@ -1,7 +1,11 @@
 from modules import functions
-import FreeSimpleGUI as sg 
+import FreeSimpleGUI as sg
+import time
 
-# Create the elements that go inside the window
+#pysimpleGUI Themes google
+sg.theme("NeonYellow1")
+
+clock = sg.Text('', key='clock')
 label = sg.Text("Type in a to-do")  # Create a text label
 input_box = sg.InputText(tooltip="Enter todo", key="todo")
 add_button = sg.Button("Add")  # Create an "Add" button
@@ -10,7 +14,8 @@ edit_button = sg.Button("Edit")
 complete_button = sg.Button("Complete")
 
 # Define the layout of the window
-layout = [[label],
+layout = [[clock],
+          [label],
           [input_box, add_button],
           [list_box, edit_button, complete_button],
           [sg.Button("Exit")]]  # Arrange the elements in the window
@@ -21,9 +26,8 @@ window = sg.Window("My To-Do App", layout, font=('Montserrat'))
 # Display the window and keep it open until the user interacts with it
 # window.read() in FreeSimpleGUI always return a tuple with exactly two values: event and values
 while True:
-    event, values = window.read()
-    print(event) #add_button
-    print(values) #dictionary of inputs (key value pairs of inputs)
+    event, values = window.read(timeout=200)
+    window['clock'].update(value=time.strftime("%b %d, %Y %H:%M:%S"))
     
     if event == "Add":
         todos = functions.get_todos()
@@ -33,22 +37,28 @@ while True:
         window['todos'].update(values=todos)
         
     elif event == "Edit":
-        todo_to_edit = values['todos'][0]  # Get the first selected item from the Listbox
-        new_todo =values['todo'] + "\n"
+        if values["todos"]:
+            todo_to_edit = values['todos'][0]  # Get the first selected item from the Listbox
+            new_todo =values['todo'] + "\n"
 
-        todos = functions.get_todos()
-        index = todos.index(todo_to_edit)
-        todos[index] = new_todo
-        functions.write_todos(todos)
-        window['todos'].update(values=todos)
+            todos = functions.get_todos()
+            index = todos.index(todo_to_edit)
+            todos[index] = new_todo
+            functions.write_todos(todos)
+            window['todos'].update(values=todos)
+        else:
+            sg.popup("Please select an item first!", font=("Montserat", 10))
         
     elif event == "Complete":
-        completed = values['todos'][0]
-        todos = functions.get_todos()
-        todos.remove(completed)
-        functions.write_todos(todos)
-        window['todos'].update(values=todos)
-        window['todo'].update(value='')
+        if values["todos"]:   
+            completed = values['todos'][0]
+            todos = functions.get_todos()
+            todos.remove(completed)
+            functions.write_todos(todos)
+            window['todos'].update(values=todos)
+            window['todo'].update(value='')
+        else:
+            sg.popup("Please select an item first!")
 
     elif event == "todos":
         #values here is the dictionary, values=['todos] ('todos' is the key) will return the list (value = selected todo in the list) index 0 is the index of the only item(string) in the list
