@@ -1,6 +1,11 @@
 from modules import functions
 import FreeSimpleGUI as sg
 import time
+import os
+
+if not os.path.exists("todos.txt"):
+    with open("todos.txt", "w") as file:
+        pass
 
 #pysimpleGUI Themes google
 sg.theme("NeonYellow1")
@@ -27,7 +32,11 @@ window = sg.Window("My To-Do App", layout, font=('Montserrat'))
 # window.read() in FreeSimpleGUI always return a tuple with exactly two values: event and values
 while True:
     event, values = window.read(timeout=200)
-    window['clock'].update(value=time.strftime("%b %d, %Y %H:%M:%S"))
+    
+    if event == sg.WIN_CLOSED or event == "Exit":
+        break
+    else:
+        window['clock'].update(value=time.strftime("%b %d, %Y %H:%M:%S"))
     
     if event == "Add":
         todos = functions.get_todos()
@@ -66,8 +75,5 @@ while True:
             window['todo'].update(value=values['todos'][0])
         else:
             continue
-        
-    elif event == sg.WIN_CLOSED or event == "Exit":
-        break
         
 window.close()
