@@ -16,14 +16,17 @@ input_box = sg.InputText(tooltip="Enter todo", key="todo")
 add_button = sg.Button("Add")  # Create an "Add" button
 list_box = sg.Listbox(values=functions.get_todos(), key='todos', enable_events = True, size=[45,10])
 edit_button = sg.Button("Edit")
-complete_button = sg.Button("Complete")
+complete_button = sg.Button("Delete")
+done_button = sg.Button("Done", key="Strike")
 
 # Define the layout of the window
 layout = [[clock],
           [label],
           [input_box, add_button],
-          [list_box, edit_button, complete_button],
-          [sg.Button("Exit")]]  # Arrange the elements in the window
+          [list_box, sg.Column([[edit_button],
+                               [done_button],
+                               [complete_button],
+                               [sg.Button("Exit")]])]]  # Arrange the elements in the window
 
 # Create the window with a title and the defined layout
 window = sg.Window("My To-Do App", layout, font=('Montserrat'))
@@ -57,8 +60,19 @@ while True:
             window['todos'].update(values=todos)
         else:
             sg.popup("Please select an item first!", font=("Montserat", 10))
+            
+    elif event == "Strike":
+        if values["todos"]:
+            todo_to_strike = values['todos'][0]
+            todos = functions.get_todos()
+            index = todos.index(todo_to_strike)
+            todos[index] = f"~~{todo_to_strike.strip()}~~\n"  # Add markdown-style strikethrough
+            functions.write_todos(todos)
+            window['todos'].update(values=todos)
+        else:
+            sg.popup("Please select an item first!")
         
-    elif event == "Complete":
+    elif event == "Delete":
         if values["todos"]:   
             completed = values['todos'][0]
             todos = functions.get_todos()
